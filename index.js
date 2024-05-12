@@ -5,7 +5,9 @@ const app = express();
 const port = 3000;
 
 // Usa cors como middleware
-app.use(cors());
+app.use(cors({
+    origin: '*'
+}));
 
 app.use('/', routes);
 
