@@ -15,9 +15,14 @@ exports.getUnidades = (req, res) => {
 };
 
 exports.createTicket = async (req, res) => {
-    const newTicket = req.body;
-    const ticketsCollection = collection(db, 'tickets');
-    const docRef = await addDoc(ticketsCollection, newTicket);
-    newTicket.id = docRef.id;
-    res.json(newTicket);
+    try {
+        const newTicket = req.body;
+        const ticketsCollection = collection(db, 'tickets');
+        const docRef = await addDoc(ticketsCollection, newTicket);
+        newTicket.id = docRef.id;
+        res.json(newTicket);
+    } catch (error) {
+        console.error('Error al crear el ticket:', error);
+        res.status(500).json({ error: 'Error al crear el ticket' });
+    }
 };
