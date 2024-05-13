@@ -14,23 +14,6 @@ exports.getUnidades = (req, res) => {
     res.json(models.unidades[req.params.id] || {});
 };
 
-exports.createTicket = async (req, res) => {
-    try {
-        console.log(req.body); // Verifica el contenido de req.body
-        const newTicket = req.body;
-        if (!newTicket) {
-            throw new Error('No se recibieron datos');
-        }
-        const ticketsCollection = collection(db, 'tickets');
-        const docRef = await addDoc(ticketsCollection, newTicket);
-        newTicket.id = docRef.id;
-        res.json(newTicket);
-    } catch (error) {
-        console.error('Error al crear el ticket:', error);
-        res.status(500).json({ error: 'Error al crear el ticket' });
-    }
-};
-
 exports.getTicketsByDate = async (req, res) => {
     const startDate = new Date(req.params.startDate);
     const endDate = new Date(req.params.endDate);
@@ -43,4 +26,18 @@ exports.getTicketsByDate = async (req, res) => {
         return data;
     }).filter(ticket => ticket.fecha >= startDate && ticket.fecha <= endDate);
     res.json(tickets);
+};
+
+exports.login = async (req, res) => {
+    const identificacion = req.params.identificacion;
+    const contrasena = req.params.contrasena;
+    const usersRef = collection(db, 'users');
+    const q = query(usersRef, where('identificacion', '==', identificacion), where('contrasena', '==', contrasena));
+    const querySnapshot = await getDocs(q);
+    const user = querySnapshot.docs.map(doc => doc.data())[0];
+    if (user) {
+        res.json(user);
+    } else {
+        res.status(404).send('Usuario no encontrado');
+    }
 };
