@@ -18,7 +18,7 @@ exports.getTicketsByDate = async (req, res) => {
     const startDate = new Date(req.params.startDate);
     const endDate = new Date(req.params.endDate);
     const ticketsRef = collection(db, 'tickets');
-    const q = query(ticketsRef, orderBy('fecha'));
+    const q = query(ticketsRef, orderBy('fechacreacion'));
     const querySnapshot = await getDocs(q);
     const tickets = querySnapshot.docs.map(doc => {
         const data = doc.data();
