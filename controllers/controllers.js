@@ -17,6 +17,7 @@ exports.getUnidades = (req, res) => {
 exports.getTicketsByDate = async (req, res) => {
     const startDate = new Date(req.params.startDate);
     const endDate = new Date(req.params.endDate);
+    endDate.setUTCHours(23, 59, 59, 999); // Ajusta la fecha final para incluir todo el día
     const ticketsRef = collection(db, 'tickets');
     const q = query(ticketsRef, orderBy('fechacreacion'));
     const querySnapshot = await getDocs(q);
